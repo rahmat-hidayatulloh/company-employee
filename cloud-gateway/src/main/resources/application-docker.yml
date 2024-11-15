@@ -26,8 +26,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     enabled: true
-    service-url:
-      defaultZone: http://localhost:8882/eureka/
 
 management:
   endpoints:
@@ -38,24 +36,17 @@ management:
     info:
       enabled: true
 
-logging:
-  level:
-    com.netflix.eureka: DEBUG
-    org.springframework.cloud.gateway: DEBUG
-
-# Konfigurasi profil local
+# Konfigurasi profil Docker
 ---
 spring:
   config:
     activate:
       on-profile:
-        - local
+        - docker
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8882/eureka/
+      defaultZone: http://eureka-server:8882/eureka/
   instance:
-    hostname: localhost
-    lease-renewal-interval-in-seconds: 10
-    lease-expiration-duration-in-seconds: 30
+    hostname: eureka-server

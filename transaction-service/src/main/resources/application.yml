@@ -4,17 +4,16 @@ spring:
 
   datasource:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost:1433;databaseName=db_transaksi
+    url: jdbc:sqlserver://localhost;encrypt=true;trustServerCertificate=true;databaseName=db_transaksi
     username: SA
-    password: P@ssw0rd
+    password: P@$$w0rd
 
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: none
     properties:
-      hibernate:
-        dialect: org.hibernate.dialect.SQLServerDialect
+      dialect: org.hibernate.dialect.SQLServerDialect
 
 server:
   port: 8002
@@ -27,3 +26,13 @@ eureka:
       defaultZone: http://localhost:8882/eureka/
   instance:
     hostname: localhost
+
+integration:
+  exmcs:
+    log-transaction-service:
+      saving-log-transaction:
+        url: http://log-service/log-transaction/save
+    company-service:
+      getting-employee-data:
+        url: http://company-service/api-fe/get-employee
+
