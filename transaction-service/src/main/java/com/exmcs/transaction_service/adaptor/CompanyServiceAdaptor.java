@@ -1,5 +1,6 @@
 package com.exmcs.transaction_service.adaptor;
 
+import com.exmcs.transaction_service.model.dto.IsExistEmployeeDto;
 import com.exmcs.transaction_service.model.response.SourceOfEmployee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +21,16 @@ public class CompanyServiceAdaptor {
     @Value("${integration.exmcs.company-service.getting-employee-data.url}")
     String companyEmployeeByIdUrl;
 
+    @Value("${integration.exmcs.company-service.checking-employee.url}")
+    String checkingEmloyeeByIdUrl;
+
     private RestTemplate exmcsRestTemplate;
 
     public CompanyServiceAdaptor(RestTemplate exmcsRestTemplate) {
         this.exmcsRestTemplate = exmcsRestTemplate;
     }
 
-    public SourceOfEmployee isEmployeeExist(String employeeId){
+    public SourceOfEmployee getSourceOfEmployee(String employeeId){
         log.info("try to access company url: {}", companyEmployeeByIdUrl);
 
         StringBuilder sb = new StringBuilder(companyEmployeeByIdUrl)
@@ -38,5 +42,16 @@ public class CompanyServiceAdaptor {
         return exmcsRestTemplate.exchange(sb.toString(), HttpMethod.GET, entity, SourceOfEmployee.class).getBody();
     }
 
+    public IsExistEmployeeDto isEmployeeExist(String employeeId){
+        log.info("try to access company url: {}", checkingEmloyeeByIdUrl);
+
+        StringBuilder sb = new StringBuilder(checkingEmloyeeByIdUrl)
+                .append("/")
+                .append(employeeId);
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        return exmcsRestTemplate.exchange(sb.toString(), HttpMethod.GET, entity, IsExistEmployeeDto.class).getBody();
+    }
 
 }

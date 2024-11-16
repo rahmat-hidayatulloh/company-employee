@@ -35,4 +35,5 @@ integration:
     company-service:
       getting-employee-data:
         url: http://company-service/api-fe/get-employee
-
+      checking-employee:
+        url: http://company-service/api-fe/checking-employee

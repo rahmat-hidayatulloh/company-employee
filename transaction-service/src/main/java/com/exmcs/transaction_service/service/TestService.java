@@ -24,7 +24,7 @@ public class TestService implements BaseService<TestRequest, EmptyResponse> {
     @Override
     public EmptyResponse execute(TestRequest input) {
 
-        SourceOfEmployee sourceOfEmployee = companyServiceAdaptor.isEmployeeExist("5");
+        SourceOfEmployee sourceOfEmployee = companyServiceAdaptor.getSourceOfEmployee("5");
         log.info("result Data from Company-service: {}", sourceOfEmployee);
 
         return null;

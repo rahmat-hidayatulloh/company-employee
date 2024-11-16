@@ -52,6 +52,7 @@ public class PostTransactionService implements BaseService<PostTransactionReques
         int totalRecords = 0, successRecords = 0, failedRecords = 0;
         StringBuilder failedIds = new StringBuilder();
 
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input.getFile().getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -91,10 +92,12 @@ public class PostTransactionService implements BaseService<PostTransactionReques
         BigDecimal amount = new BigDecimal(data[1]);
         LocalDate transactionDate = LocalDate.parse(data[2]);
 
-        SourceOfEmployee sourceOfEmployee = companyServiceAdaptor.isEmployeeExist(employeeId.toString());
+        if(!companyServiceAdaptor.isEmployeeExist(employeeId.toString()).isExistEmployee()){
+
+        }
 
         return Transaction.builder()
-                .employeeId(sourceOfEmployee.getEmployee().getEmployeeId())
+                .employeeId(employeeId)
                 .amount(amount)
                 .tglTransaksi(transactionDate)
                 .build();
