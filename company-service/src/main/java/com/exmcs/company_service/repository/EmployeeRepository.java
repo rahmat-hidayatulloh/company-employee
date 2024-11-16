@@ -15,8 +15,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Procedure(procedureName = "sp_GetEmployeeHierarchy")
     List<Object[]> getEmployeeHierarchy();
 
-    @Procedure(procedureName = "sp_GetEmployeeHierarchyById")
-    List<Object[]> getEmployeeHierarchyById(@Param("EmployeeId") Long employeeId);
+    @Procedure(procedureName = "sp_GetIdWIthEmployeeHierarchyById")
+    List<Object[]> getIdWIthEmployeeHierarchyById(@Param("EmployeeId") Long employeeId);
 
     @Procedure(procedureName = "sp_GetHierarchyIdList")
     String getHierarchyPathById(@Param("EmployeeId") Long employeeId);

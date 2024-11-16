@@ -30,37 +30,21 @@ public class GetEmployeeService implements BaseService<UniversalIdRequest, GetEm
 
     @Override
     public GetEmployeeResponse execute(UniversalIdRequest input) {
-        List<Object[]> hierarchies = employeeRepository.getEmployeeHierarchyById(input.getId());
+
+        List<Object[]> hierarchies = employeeRepository.getIdWIthEmployeeHierarchyById(input.getId());
 
         if (hierarchies == null || hierarchies.isEmpty()) {
             return new GetEmployeeResponse(null, null);
         }
 
-        List<EmployeeDto> employeeDtos = new ArrayList<>();
-
         String pathHierarchyIds = null;
+        Long employeeId = Long.valueOf(0);
         for (Object[] result : hierarchies) {
-            Long employeeId = (result[0] instanceof Long) ? (Long) result[0] : Long.valueOf((Integer) result[0]);
-            String employeeName = (String) result[1];
-            String managerName = (String) result[2];
-            String employeeFormat = (String) result[3];
-            String pathHierarchy = (String) result[4];
-            pathHierarchyIds = (String) result[5];
-            Integer pathLevel = (Integer) result[6];
-
-            EmployeeDto dto = new EmployeeDto(employeeId, employeeName, managerName, employeeFormat, pathHierarchy, pathLevel);
-            employeeDtos.add(dto);
+            employeeId = (result[0] instanceof Long) ? (Long) result[0] : Long.valueOf((Integer) result[0]);
+            pathHierarchyIds = (String) result[1];
         }
 
-        EmployeeDto employeeDto = employeeDtos.isEmpty() ? null : employeeDtos.get(0);
-
-/*        List<Long> hierarchyIdList = pathHierarchyString != null ?
-                Arrays.stream(pathHierarchyString.split(" > "))
-                        .map(Long::parseLong)
-                        .collect(Collectors.toList()) :
-                Collections.emptyList();*/
-
-        return new GetEmployeeResponse(employeeDto, pathHierarchyIds);
+        return new GetEmployeeResponse(employeeId, pathHierarchyIds);
     }
 
 }

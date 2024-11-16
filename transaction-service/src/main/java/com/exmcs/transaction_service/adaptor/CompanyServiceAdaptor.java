@@ -42,7 +42,7 @@ public class CompanyServiceAdaptor {
         return exmcsRestTemplate.exchange(sb.toString(), HttpMethod.GET, entity, SourceOfEmployee.class).getBody();
     }
 
-    public IsExistEmployeeDto isEmployeeExist(String employeeId){
+/*    public IsExistEmployeeDto isEmployeeExist(String employeeId){
         log.info("try to access company url: {}", checkingEmloyeeByIdUrl);
 
         StringBuilder sb = new StringBuilder(checkingEmloyeeByIdUrl)
@@ -52,6 +52,6 @@ public class CompanyServiceAdaptor {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
         return exmcsRestTemplate.exchange(sb.toString(), HttpMethod.GET, entity, IsExistEmployeeDto.class).getBody();
-    }
+    }*/
 
 }

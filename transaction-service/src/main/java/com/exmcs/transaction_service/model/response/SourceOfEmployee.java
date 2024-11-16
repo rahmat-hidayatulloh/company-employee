@@ -11,7 +11,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 public class SourceOfEmployee extends BaseResponse {
 
-    private EmployeeDto employee;
+    private Long employeeId;
 
     private String pathHierarchyIds;
 }

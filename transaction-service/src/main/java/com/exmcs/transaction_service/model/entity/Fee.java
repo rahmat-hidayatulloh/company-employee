@@ -17,16 +17,19 @@ public class Fee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "employee_id")
     private Long employeeId;
 
-    @Column(name = "amount_fee", precision = 10, scale = 2)
+    @Column(name = "amount_fee")
     private BigDecimal amountFee;
 
     @Column(name = "tgl_fee")
     private LocalDate tglFee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
+    private Transaction transaction;
 
 }

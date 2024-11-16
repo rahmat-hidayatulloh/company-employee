@@ -13,7 +13,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class GetEmployeeResponse extends BaseResponse {
 
-    private EmployeeDto employee;
+    private Long employeeId;
 
     private String pathHierarchyIds;
 }

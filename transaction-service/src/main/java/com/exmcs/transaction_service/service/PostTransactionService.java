@@ -77,7 +77,7 @@ public class PostTransactionService implements BaseService<PostTransactionReques
 //                }
             }
             transactionRepository.saveAll(transactions);
-            calculateFees(transactions);
+            /*calculateFees(transactions);*/
             saveLog(fileName, totalRecords, successRecords, failedRecords, failedIds.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -92,40 +92,43 @@ public class PostTransactionService implements BaseService<PostTransactionReques
         BigDecimal amount = new BigDecimal(data[1]);
         LocalDate transactionDate = LocalDate.parse(data[2]);
 
-        if(!companyServiceAdaptor.isEmployeeExist(employeeId.toString()).isExistEmployee()){
+/*        if(!companyServiceAdaptor.isEmployeeExist(employeeId.toString()).isExistEmployee()){
 
-        }
+        }*/
 
-        return Transaction.builder()
-                .employeeId(employeeId)
-                .amount(amount)
-                .tglTransaksi(transactionDate)
-                .build();
-    }
+        SourceOfEmployee sourceOfEmployee = companyServiceAdaptor.getSourceOfEmployee(employeeId.toString());
 
-    private void calculateFees(List<Transaction> transactions) {
-        for (Transaction transaction : transactions) {
+        List<Long> hierarchyIdList = (sourceOfEmployee.getPathHierarchyIds() != null) ?
+                Arrays.stream(sourceOfEmployee.getPathHierarchyIds().split(" > "))
+                        .map(Long::parseLong)
+                        .collect(Collectors.toList()) :
+                Collections.emptyList();
 
-            SourceOfEmployee sourceOfEmployee = companyServiceAdaptor.isEmployeeExist(transaction.getEmployeeId().toString());
-
-            List<Long> hierarchyIdList = (sourceOfEmployee.getPathHierarchyIds() != null) ?
-                    Arrays.stream(sourceOfEmployee.getPathHierarchyIds().split(" > "))
-                            .map(Long::parseLong)
-                            .collect(Collectors.toList()) :
-                    Collections.emptyList();
+//        Build Fee hierarchy
+        List<Fee> fees = new ArrayList<>();
+        for (Long hierarchyId : hierarchyIdList) {
 
             BigDecimal totalAmount = hierarchyIdList.stream()
-                    .map(id -> transactionRepository.findTotalAmountByEmployeeId(id))
+                    .map(id -> amount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             BigDecimal fee = calculateFee(totalAmount, hierarchyIdList.size());
-            feeRepository.save(Fee.builder()
-                            .employeeId(transaction.getEmployeeId())
-                            .amountFee(fee)
-                            .tglFee(LocalDate.now())
+
+            fees.add(Fee.builder()
+                    .employeeId(hierarchyId)
+                    .amountFee(fee)
+                    .tglFee(LocalDate.now())
                     .build());
         }
+
+        return Transaction.builder()
+                .employeeId(sourceOfEmployee.getEmployeeId())
+                .amount(amount)
+                .tglTransaksi(transactionDate)
+                .fees(fees)
+                .build();
     }
+
     private BigDecimal calculateFee(BigDecimal totalAmount, int hierarchySize) {
         return totalAmount.multiply(BigDecimal.valueOf(1.0 / hierarchySize));
     }
