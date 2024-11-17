@@ -1,6 +1,7 @@
 package com.exmcs.company_service.service;
 
 import com.exmcs.company_service.common.base.BaseService;
+import com.exmcs.company_service.exception.BussinessException;
 import com.exmcs.company_service.model.dto.EmployeeDto;
 import com.exmcs.company_service.model.request.UniversalIdRequest;
 import com.exmcs.company_service.model.response.GetEmployeeResponse;
@@ -34,7 +35,8 @@ public class GetEmployeeService implements BaseService<UniversalIdRequest, GetEm
         List<Object[]> hierarchies = employeeRepository.getIdWIthEmployeeHierarchyById(input.getId());
 
         if (hierarchies == null || hierarchies.isEmpty()) {
-            return new GetEmployeeResponse(null, null);
+            /*return new GetEmployeeResponse(null, null);*/
+            throw new BussinessException("Company", input.getId());
         }
 
         String pathHierarchyIds = null;
