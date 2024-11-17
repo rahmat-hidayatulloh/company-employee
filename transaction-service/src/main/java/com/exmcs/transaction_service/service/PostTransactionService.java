@@ -58,7 +58,18 @@ public class PostTransactionService implements BaseService<PostTransactionReques
             while ((line = reader.readLine()) != null) {
                 totalRecords++;
                 try {
-                    transactions.add(parseTransaction(line));
+/*                    transactions.add(parseTransaction(line));
+
+                    successRecords++;*/
+                    Transaction transaction = parseTransaction(line);
+
+                    for (Fee fee : transaction.getFees()) {
+                        fee.setTransaction(transaction);
+                    }
+
+                    transactionRepository.save(transaction);
+
+                    transactions.add(transaction);
                     successRecords++;
                 }
                 catch (NotFoundException ex) {
@@ -76,7 +87,7 @@ public class PostTransactionService implements BaseService<PostTransactionReques
 //                    failedIds.append("Invalid data").append(", ");
 //                }
             }
-            transactionRepository.saveAll(transactions);
+/*            transactionRepository.saveAll(transactions);*/
             /*calculateFees(transactions);*/
             saveLog(fileName, totalRecords, successRecords, failedRecords, failedIds.toString());
         } catch (IOException e) {
