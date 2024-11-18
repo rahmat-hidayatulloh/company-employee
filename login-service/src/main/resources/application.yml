@@ -1,0 +1,53 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: login-service
+  h2:
+    console:
+      enabled: true
+      path: /h2-ui
+
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost;encrypt=true;trustServerCertificate=true;databaseName=db_auth
+    username: SA
+    password: P@$$w0rd
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.SQLServerDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8882/eureka/
+  instance:
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
+configuration:
+  jwt:
+    secret-key:
+      value: exmcsJwtSecretKeyexmcsJwtSecretKeyexmcsJwtSecretKeyexmcsJwtSecretKeyexmcsJwtSecretexmcsJwtSecret
+    token-expired-time:
+      value: 3600000
+    CookieName:
+      value: exmcs
+    jwt-token-type:
+      value: Bearer
+
+
+logging:
+  level:
+    org.springframework.jdbc.core: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
