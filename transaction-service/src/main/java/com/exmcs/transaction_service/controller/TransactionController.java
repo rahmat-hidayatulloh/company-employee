@@ -20,7 +20,7 @@ public class TransactionController {
     }
 
     @PostMapping("/post_file_csv")
-    public EmptyResponse saveTransactionByFileCSV(@RequestParam MultipartFile file){
+    public EmptyResponse saveTransactionByFileCSV(@RequestParam MultipartFile file) {
 
         return postTransactionService.execute(PostTransactionRequest.builder()
                 .file(file)

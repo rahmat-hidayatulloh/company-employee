@@ -1,4 +1,4 @@
-package com.exmcs.transaction_service.model.response;
+package com.exmcs.transaction_service.model.dto;
 
 import com.exmcs.transaction_service.common.base.BaseResponse;
 import com.exmcs.transaction_service.model.dto.EmployeeDto;

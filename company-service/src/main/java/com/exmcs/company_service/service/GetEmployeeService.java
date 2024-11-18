@@ -36,7 +36,7 @@ public class GetEmployeeService implements BaseService<UniversalIdRequest, GetEm
 
         if (hierarchies == null || hierarchies.isEmpty()) {
             /*return new GetEmployeeResponse(null, null);*/
-            throw new BussinessException("Company", input.getId());
+            throw new BussinessException("Company id " + input.getId() + " Not Found!");
         }
 
         String pathHierarchyIds = null;

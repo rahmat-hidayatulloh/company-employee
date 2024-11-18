@@ -4,10 +4,9 @@ import com.exmcs.transaction_service.adaptor.CompanyServiceAdaptor;
 import com.exmcs.transaction_service.common.base.BaseService;
 import com.exmcs.transaction_service.model.request.TestRequest;
 import com.exmcs.transaction_service.model.response.EmptyResponse;
-import com.exmcs.transaction_service.model.response.SourceOfEmployee;
+import com.exmcs.transaction_service.model.dto.SourceOfEmployee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service

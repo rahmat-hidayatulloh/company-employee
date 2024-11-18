@@ -3,14 +3,15 @@ package com.exmcs.transaction_service.service;
 import com.exmcs.transaction_service.adaptor.CompanyServiceAdaptor;
 import com.exmcs.transaction_service.adaptor.LogTransactionServiceAdaptor;
 import com.exmcs.transaction_service.common.base.BaseService;
+import com.exmcs.transaction_service.exception.BussinessException;
+import com.exmcs.transaction_service.model.dto.SourceOfEmployee;
+import com.exmcs.transaction_service.model.dto.SourceOfLogTransaction;
 import com.exmcs.transaction_service.model.entity.Fee;
 import com.exmcs.transaction_service.model.entity.Transaction;
 import com.exmcs.transaction_service.model.request.PostTransactionRequest;
 import com.exmcs.transaction_service.model.response.EmptyResponse;
-import com.exmcs.transaction_service.model.response.SourceOfEmployee;
 import com.exmcs.transaction_service.repository.FeeRepository;
 import com.exmcs.transaction_service.repository.TransactionRepository;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -69,20 +70,18 @@ public class PostTransactionService implements BaseService<PostTransactionReques
                     transactions.add(transaction);
                     successRecords++;
                 }
-                catch (NotFoundException ex) {
+                catch (BussinessException ex) {
                     failedRecords++;
-/*                    failedIds.append(ex.getEmployeeId()).append(", ");*/
+                    failedIds.append(ex.getMessage()).append("|| ");
                 } catch (Exception ex) {
                     failedRecords++;
                     failedIds.append("Invalid data").append(", ");
                 }
             }
-            saveLog(fileName, totalRecords, successRecords, failedRecords, failedIds.toString());
+            return saveLog(fileName, totalRecords, successRecords, failedRecords, failedIds.toString()).getBody();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return new EmptyResponse();
     }
 
     private Transaction parseTransaction(String line){
@@ -90,10 +89,6 @@ public class PostTransactionService implements BaseService<PostTransactionReques
         Long employeeId = Long.parseLong(data[0]);
         BigDecimal amount = new BigDecimal(data[1]);
         LocalDate transactionDate = LocalDate.parse(data[2]);
-
-/*        if(!companyServiceAdaptor.isEmployeeExist(employeeId.toString()).isExistEmployee()){
-
-        }*/
 
         SourceOfEmployee sourceOfEmployee = companyServiceAdaptor.getSourceOfEmployee(employeeId.toString());
 
@@ -103,7 +98,6 @@ public class PostTransactionService implements BaseService<PostTransactionReques
                         .collect(Collectors.toList()) :
                 Collections.emptyList();
 
-//        Build Fee hierarchy
         List<Fee> fees = new ArrayList<>();
         for (Long hierarchyId : hierarchyIdList) {
 
@@ -132,10 +126,16 @@ public class PostTransactionService implements BaseService<PostTransactionReques
         return totalAmount.multiply(BigDecimal.valueOf(1.0 / hierarchySize));
     }
 
-    private void saveLog(String fileName, int totalRecords, int successRecords, int failedRecords, String failedIds) {
-        //Code Save Log
-/*        LogTransaction log = new LogTransaction(fileName, totalRecords, successRecords, failedRecords, failedIds, LocalDate.now());
-        logRepository.save(log);*/
+    private ResponseEntity<EmptyResponse> saveLog(String fileName, int totalRecords, int successRecords, int failedRecords, String failedIds) {
+
+        return logTransactionServiceAdaptor.postLogTransaction(SourceOfLogTransaction.builder()
+                .csvFilename(fileName)
+                .totalRecord(totalRecords)
+                .totalRecordSuccess(successRecords)
+                .totalRecordFailed(failedRecords)
+                .failedIdNotes(failedIds)
+                .build()
+        );
     }
 
 

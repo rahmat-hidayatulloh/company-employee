@@ -30,7 +30,7 @@ eureka:
 integration:
   exmcs:
     log-transaction-service:
-      saving-log-transaction:
+      saving-log:
         url: http://log-service/log-transaction/save
     company-service:
       getting-employee-data:
