@@ -20,6 +20,10 @@ spring:
           uri: lb://log-service
           predicates:
             - Path=/log/**
+        - id: LOGIN-SERVICE
+          uri: lb://login-service
+          predicates:
+            - Path=/auth/**
 
 eureka:
   client:
@@ -37,6 +41,10 @@ management:
   endpoint:
     info:
       enabled: true
+
+jwt:
+  secret-key:
+    value: exmcsJwtSecretKeyexmcsJwtSecretKeyexmcsJwtSecretKeyexmcsJwtSecretKeyexmcsJwtSecretexmcsJwtSecret
 
 logging:
   level:
@@ -59,3 +67,4 @@ eureka:
     hostname: localhost
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30
+

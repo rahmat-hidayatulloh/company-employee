@@ -6,10 +6,8 @@ import com.exmcs.login_service.model.request.PostSigninRequest;
 import com.exmcs.login_service.model.response.PostSigninResponse;
 import com.exmcs.login_service.service.PostSigninService;
 import com.exmcs.login_service.service.PostSignoutService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,6 +26,11 @@ public class LoginController {
     @PostMapping("/signin")
     public PostSigninResponse signing(@RequestBody PostSigninRequest request){
         return postSigninService.execute(request);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(){
+        return ResponseEntity.ok("test");
     }
 
     @PostMapping("/signout")
